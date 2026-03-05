@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Login Database</title>
+
+<style>
+
+body{
+background:#0f172a;
+font-family:arial;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+color:white;
+}
+
+.box{
+background:#1e293b;
+padding:30px;
+border-radius:10px;
+width:300px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:5px 0;
+}
+
+button{
+width:100%;
+padding:10px;
+background:#22c55e;
+border:none;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>LOGIN</h2>
+
+<input id="user" placeholder="username">
+<input id="pass" type="password" placeholder="password">
+
+<button onclick="login()">LOGIN</button>
+
+</div>
+
+<script>
+
+var api="https://script.google.com/macros/s/AKfycbz0QEHw4YLiHUoePDbhlO1DyybKHhUu4mq5F8G0rA1KdQlp6uNoZ9W2t4JdoDecLBLGZw/exec";
+
+function login(){
+
+fetch(api+"?action=login&username="+user.value+"&password="+pass.value)
+
+.then(res=>res.json())
+.then(data=>{
+
+if(data.status=="success"){
+
+localStorage.setItem("login","true");
+window.location="dashboard.html";
+
+}else{
+
+alert("Login gagal");
+
+}
+
+})
+
+}
+
+</script>
+
+</body>
+</html>
