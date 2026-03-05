@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Dashboard Database</title>
+
+<style>
+
+body{
+font-family:arial;
+background:#f1f5f9;
+padding:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+td,th{
+border:1px solid #ccc;
+padding:8px;
+}
+
+input{
+padding:8px;
+margin:5px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>DATABASE</h2>
+
+<input id="nama" placeholder="nama">
+<input id="kategori" placeholder="kategori">
+<input id="lokasi" placeholder="lokasi">
+
+<button onclick="add()">Tambah</button>
+
+<br><br>
+
+<input id="search" placeholder="Search..." onkeyup="cari()">
+
+<br><br>
+
+<table id="table"></table>
+
+<script>
+
+var api="https://script.google.com/macros/s/AKfycbz0QEHw4YLiHUoePDbhlO1DyybKHhUu4mq5F8G0rA1KdQlp6uNoZ9W2t4JdoDecLBLGZw/exec";
+
+load();
+
+function load(){
+
+fetch(api+"?action=getData")
+.then(res=>res.json())
+.then(data=>{
+
+window.data=data;
+
+render(data);
+
+})
+
+}
+
+function render(data){
+
+var html="<tr><th>ID</th><th>Nama</th><th>Kategori</th><th>Lokasi</th><th>Aksi</th></tr>";
+
+for(var i=1;i<data.length;i++){
+
+html+=`
+<tr>
+
+<td>${data[i][0]}</td>
+<td>${data[i][1]}</td>
+<td>${data[i][2]}</td>
+<td>${data[i][3]}</td>
+
+<td>
+
+<button onclick="hapus('${data[i][0]}')">Delete</button>
+
+</td>
+
+</tr>
+`;
+
+}
+
+table.innerHTML=html;
+
+}
+
+function add(){
+
+fetch(api,{
+method:"POST",
+body:new URLSearchParams({
+action:"add",
+nama:nama.value,
+kategori:kategori.value,
+lokasi:lokasi.value
+})
+})
+.then(()=>load())
+
+}
+
+function hapus(id){
+
+fetch(api,{
+method:"POST",
+body:new URLSearchParams({
+action:"delete",
+id:id
+})
+})
+.then(()=>load())
+
+}
+
+function cari(){
+
+var key=search.value.toLowerCase();
+
+var filtered=data.filter(r=>String(r).toLowerCase().includes(key));
+
+render(filtered);
+
+}
+
+</script>
+
+</body>
+</html>
